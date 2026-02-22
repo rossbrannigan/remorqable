@@ -351,6 +351,12 @@ export default function Page() {
               Videos
             </a>
 
+            <Link href="/map" style={{ color: C.dim, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", textDecoration: "none", transition: "color 0.2s" }}
+              onMouseEnter={e => (e.currentTarget.style.color = C.cream)}
+              onMouseLeave={e => (e.currentTarget.style.color = C.dim)}>
+              Map
+            </Link>
+
             <a href={YT_CHANNEL} target="_blank" rel="noopener noreferrer"
               style={{ display: "flex", alignItems: "center", gap: 8, background: C.red, color: "white", padding: "8px 18px", fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", transition: "opacity 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.opacity = "0.8")}
@@ -498,6 +504,58 @@ export default function Page() {
               onMouseLeave={e => (e.currentTarget.style.opacity = "1")}>
               Subscribe Free on YouTube →
             </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══ MAP THE JOURNEY ══════════════════════════════════════ */}
+      <section style={{ borderTop: `1px solid ${C.navy}`, background: C.bg, padding: "80px 28px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 60, alignItems: "center" }}>
+          <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
+            <div style={{ height: 3, width: 44, background: C.orange, marginBottom: 24 }} />
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(2.5rem, 6vw, 4rem)", letterSpacing: "0.04em", color: C.cream, lineHeight: 1, marginBottom: 16 }}>
+              Map the Journey
+            </h2>
+            <p style={{ color: C.dim, fontSize: "0.95rem", lineHeight: 1.8, fontWeight: 300, maxWidth: 420, marginBottom: 32 }}>
+              Every road taken, every border crossed — plotted on a living map of Southeast Asia. Click any pin to jump straight to the video.
+            </p>
+            <Link href="/map"
+              style={{ display: "inline-flex", alignItems: "center", gap: 10, border: `1px solid ${C.orange}`, color: C.orange, padding: "12px 32px", fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", textDecoration: "none", transition: "all 0.25s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = `${C.orange}14`; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}>
+              Open the Map →
+            </Link>
+          </motion.div>
+
+          {/* Decorative map preview */}
+          <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}>
+            <Link href="/map" style={{ display: "block", textDecoration: "none", position: "relative" }}>
+              <div style={{ position: "relative", aspectRatio: "16/9", background: C.bgAlt, border: `1px solid ${C.navy}`, overflow: "hidden" }}>
+                {/* Grid lines suggesting a map */}
+                <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${C.navy}55 1px, transparent 1px), linear-gradient(90deg, ${C.navy}55 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+                {/* Decorative "pins" */}
+                {[
+                  { top: "38%", left: "28%", label: "🇰🇭" },
+                  { top: "28%", left: "42%", label: "🇹🇭" },
+                  { top: "22%", left: "52%", label: "🇻🇳" },
+                  { top: "26%", left: "36%", label: "🇱🇦" },
+                  { top: "58%", left: "55%", label: "🇮🇩" },
+                ].map((pin, i) => (
+                  <div key={i} style={{ position: "absolute", top: pin.top, left: pin.left, transform: "translate(-50%, -50%)" }}>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: C.bgAlt, border: `2px solid ${C.orange}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, boxShadow: `0 0 10px ${C.orange}55` }}>
+                      {pin.label}
+                    </div>
+                  </div>
+                ))}
+                {/* Overlay CTA */}
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(10,13,18,0.45)" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", letterSpacing: "0.2em", color: C.cream, marginBottom: 8 }}>Explore the Map</div>
+                    <div style={{ fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", color: C.orange }}>Click to open →</div>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </motion.div>
         </div>
       </section>
