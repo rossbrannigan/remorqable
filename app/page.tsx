@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
 const YT_CHANNEL  = "https://www.youtube.com/@remorqable";
@@ -25,7 +26,7 @@ const C = {
   dim:    "rgba(245,237,224,0.45)",
 };
 
-type Video = { id: string; title: string; location: string };
+type Video = { id: string; title: string; location: string; mood?: string[] };
 
 function YTIcon({ size = 20 }: { size?: number }) {
   return (
@@ -107,7 +108,7 @@ function HeroMashup({ videoIds }: { videoIds: string[] }) {
 }
 
 /* ── Video Card ──────────────────────────────────────────────── */
-function VideoCard({ video, index, onPlay }: { video: Video; index: number; onPlay: () => void }) {
+function VideoCard({ video, index }: { video: Video; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -123,35 +124,35 @@ function VideoCard({ video, index, onPlay }: { video: Video; index: number; onPl
       initial={{ opacity: 0, y: 32 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.65, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      onClick={onPlay}
       className="group"
-      style={{ cursor: "pointer" }}
     >
-      <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: C.bgAlt }}>
-        <img
-          src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-          alt={video.title}
-          loading="lazy"
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
-          className="group-hover:scale-105"
-          onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }}
-        />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,13,18,0.9) 0%, transparent 55%)" }} />
-        <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(10,13,18,0.72)", backdropFilter: "blur(8px)", border: `1px solid ${C.navy}`, padding: "4px 11px" }}>
-          <span style={{ fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: C.peach }}>{video.location}</span>
-        </div>
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: 56, height: 56, borderRadius: "50%", border: `2px solid ${C.cream}cc`, background: "rgba(10,13,18,0.4)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 0.3s, transform 0.3s" }} className="group-hover:opacity-100 group-hover:scale-110">
-            <svg width={20} height={20} viewBox="0 0 24 24" fill={C.cream}><path d="M8 5v14l11-7z"/></svg>
+      <Link href={`/videos/${video.id}`}>
+        <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: C.bgAlt, cursor: "pointer" }}>
+          <img
+            src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+            alt={video.title}
+            loading="lazy"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
+            className="group-hover:scale-105"
+            onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,13,18,0.9) 0%, transparent 55%)" }} />
+          <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(10,13,18,0.72)", backdropFilter: "blur(8px)", border: `1px solid ${C.navy}`, padding: "4px 11px" }}>
+            <span style={{ fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: C.peach }}>{video.location}</span>
+          </div>
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", border: `2px solid ${C.cream}cc`, background: "rgba(10,13,18,0.4)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 0.3s, transform 0.3s" }} className="group-hover:opacity-100 group-hover:scale-110">
+              <svg width={20} height={20} viewBox="0 0 24 24" fill={C.cream}><path d="M8 5v14l11-7z"/></svg>
+            </div>
           </div>
         </div>
-      </div>
-      <div style={{ padding: "13px 2px 4px" }}>
-        <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", letterSpacing: "0.05em", color: C.cream, lineHeight: 1.2, transition: "color 0.2s" }} className="group-hover:text-[#ff914d]">
-          {video.title || "Watch Now"}
-        </h3>
-        <p style={{ fontSize: "0.78rem", color: C.dim, marginTop: 4 }}>{video.location}</p>
-      </div>
+        <div style={{ padding: "13px 2px 4px" }}>
+          <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", letterSpacing: "0.05em", color: C.cream, lineHeight: 1.2, transition: "color 0.2s" }} className="group-hover:text-[#ff914d]">
+            {video.title || "Watch Now"}
+          </h3>
+          <p style={{ fontSize: "0.78rem", color: C.dim, marginTop: 4 }}>{video.location}</p>
+        </div>
+      </Link>
     </motion.div>
   );
 }
@@ -185,13 +186,15 @@ function Lightbox({ videoId, onClose }: { videoId: string; onClose: () => void }
    MAIN PAGE
 ══════════════════════════════════════════════════════════════ */
 export default function Page() {
-  const [lightbox, setLightbox] = useState<string | null>(null);
   const [musicOn,  setMusicOn]  = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [videos,   setVideos]   = useState<Video[]>([]);
   const [videoIds, setVideoIds] = useState<string[]>(FALLBACK_IDS);
   const [loading,  setLoading]  = useState(true);
   const [musicError, setMusicError] = useState(false);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [locationFilter, setLocationFilter] = useState<string | null>(null);
+  const [moodFilter, setMoodFilter] = useState<string | null>(null);
   const audioRef                = useRef<HTMLAudioElement>(null);
   const containerRef            = useRef<HTMLDivElement>(null);
 
@@ -226,11 +229,32 @@ export default function Page() {
         await a.play();
         setMusicOn(true);
       } catch (err) {
-        console.warn("Audio play failed:", err);
-        setMusicError(true);
+        const name = (err as Error)?.name;
+        if (name === "NotAllowedError") {
+          // Autoplay blocked by browser — not an error, just needs user gesture
+        } else {
+          console.warn("Audio play failed:", err);
+          setMusicError(true);
+        }
       }
     }
   }, [musicOn]);
+
+  /* ── Auto-start music on first user interaction ─────────── */
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    const tryPlay = () => {
+      a.volume = 0.5;
+      a.play().then(() => setMusicOn(true)).catch(() => {});
+    };
+    window.addEventListener("click", tryPlay, { once: true });
+    window.addEventListener("touchstart", tryPlay, { once: true });
+    return () => {
+      window.removeEventListener("click", tryPlay);
+      window.removeEventListener("touchstart", tryPlay);
+    };
+  }, []);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60);
@@ -244,9 +268,14 @@ export default function Page() {
     return () => window.removeEventListener("keydown", fn);
   }, []);
 
-  const displayVideos = videos.length > 0
+  const displayVideos: Video[] = videos.length > 0
     ? videos
-    : FALLBACK_IDS.map(id => ({ id, title: "Watch Now", location: "Southeast Asia 🌏" }));
+    : FALLBACK_IDS.map(id => ({ id, title: "Watch Now", location: "Southeast Asia 🌏", mood: [] }));
+  const availableLocations = [...new Set(videos.map(v => v.location))].sort();
+  const availableMoods = [...new Set(videos.flatMap(v => v.mood || []))].sort();
+  const filteredVideos = displayVideos
+    .filter(v => !locationFilter || v.location === locationFilter)
+    .filter(v => !moodFilter || (v.mood || []).includes(moodFilter));
 
   return (
     <div ref={containerRef} style={{ background: C.bg, minHeight: "100vh", color: C.cream, overflowX: "hidden" }}>
@@ -487,7 +516,9 @@ export default function Page() {
               </h2>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
-              <span style={{ color: C.dim, fontSize: 11 }}>{loading ? "Loading…" : `${displayVideos.length} videos`}</span>
+              <span style={{ color: C.dim, fontSize: 11 }}>
+                {loading ? "Loading…" : `${filteredVideos.length}${locationFilter ? ` in ${locationFilter}` : " videos"}`}
+              </span>
               <a href={YT_CHANNEL} target="_blank" rel="noopener noreferrer"
                 style={{ color: `${C.cream}28`, fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = C.orange)}
@@ -497,9 +528,79 @@ export default function Page() {
             </div>
           </div>
 
+          {/* Location filter buttons */}
+          {availableLocations.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
+              <button
+                onClick={() => setLocationFilter(null)}
+                style={{
+                  background: locationFilter === null ? C.orange : "transparent",
+                  border: `1px solid ${locationFilter === null ? C.orange : C.navy}`,
+                  color: locationFilter === null ? C.bg : C.dim,
+                  padding: "6px 16px",
+                  fontSize: 10,
+                  letterSpacing: "0.3em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  fontFamily: "inherit",
+                }}
+              >
+                All
+              </button>
+              {availableLocations.map(loc => (
+                <button
+                  key={loc}
+                  onClick={() => setLocationFilter(loc === locationFilter ? null : loc)}
+                  style={{
+                    background: locationFilter === loc ? C.orange : "transparent",
+                    border: `1px solid ${locationFilter === loc ? C.orange : C.navy}`,
+                    color: locationFilter === loc ? C.bg : C.dim,
+                    padding: "6px 16px",
+                    fontSize: 10,
+                    letterSpacing: "0.3em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {loc}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Mood filter chips */}
+          {availableMoods.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
+              <span style={{ color: C.dim, fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", alignSelf: "center", marginRight: 4 }}>Mood:</span>
+              {availableMoods.map(mood => (
+                <button
+                  key={mood}
+                  onClick={() => setMoodFilter(mood === moodFilter ? null : mood)}
+                  style={{
+                    background: moodFilter === mood ? C.sky : "transparent",
+                    border: `1px solid ${moodFilter === mood ? C.sky : C.navy}`,
+                    color: moodFilter === mood ? C.bg : C.dim,
+                    padding: "6px 16px",
+                    fontSize: 10,
+                    letterSpacing: "0.25em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {mood}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 26 }}>
-            {displayVideos.map((v, i) => (
-              <VideoCard key={v.id} video={v} index={i} onPlay={() => setLightbox(v.id)} />
+            {filteredVideos.map((v, i) => (
+              <VideoCard key={v.id} video={v} index={i} />
             ))}
           </div>
 

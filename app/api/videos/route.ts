@@ -3,6 +3,18 @@ import { NextResponse } from "next/server";
 const YT_API_KEY = process.env.YT_API_KEY || "AIzaSyBTg6E3vRp5l6Gb1FIrV_WDjosfvCc3-ac";
 const CHANNEL_ID = "UCid_-IfUqAz0zER2HBNlwqQ";
 
+function guessMood(title: string, description: string): string[] {
+  const t = (title + " " + description).toLowerCase();
+  const moods: string[] = [];
+  if (t.includes("night") || t.includes("bar") || t.includes("nightlife") || t.includes("party")) moods.push("🌙 Night Life");
+  if (t.includes("food") || t.includes("eat") || t.includes("market") || t.includes("restaurant") || t.includes("street food") || t.includes("noodle") || t.includes("cook") || t.includes("rice")) moods.push("🍜 Food & Markets");
+  if (t.includes("budget") || t.includes("cheap") || t.includes("how much") || t.includes("affordable") || t.includes("cost") || t.includes("price") || t.includes("dollar")) moods.push("💰 Budget Travel");
+  if (t.includes("cinematic") || t.includes("4k") || t.includes("drone") || t.includes("aerial") || t.includes("sunset") || t.includes("sunrise") || t.includes("timelapse")) moods.push("🎬 Cinematic");
+  if (t.includes("adventure") || t.includes("trek") || t.includes("hike") || t.includes("motorbike") || t.includes("scooter") || t.includes("explore") || t.includes("jungle")) moods.push("🏍 Adventure");
+  if (t.includes("coffee") || t.includes("café") || t.includes("cafe") || t.includes("relax") || t.includes("chill") || t.includes("slow") || t.includes("peaceful") || t.includes("quiet")) moods.push("☕ Slow Travel");
+  return moods;
+}
+
 function guessLocation(text: string): string {
   const t = text.toLowerCase();
   if (t.includes("cambodia") || t.includes("phnom penh") || t.includes("angkor") || t.includes("siem reap") || t.includes("koh rong")) return "Cambodia 🇰🇭";
@@ -18,7 +30,7 @@ function guessLocation(text: string): string {
 
 export async function GET() {
   try {
-    let allItems: { id: string; title: string; location: string }[] = [];
+    let allItems: { id: string; title: string; location: string; mood: string[] }[] = [];
     let pageToken = "";
 
     do {
@@ -50,6 +62,7 @@ export async function GET() {
           id: item.id.videoId,
           title: item.snippet.title,
           location: guessLocation(item.snippet.title + " " + item.snippet.description),
+          mood: guessMood(item.snippet.title, item.snippet.description),
         }));
         allItems = [...allItems, ...newItems];
       }
