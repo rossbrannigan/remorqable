@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const YT_API_KEY = process.env.YT_API_KEY || "AIzaSyBTg6E3vRp5l6Gb1FIrV_WDjosfvCc3-ac";
+const YT_API_KEY = process.env.YT_API_KEY;
 const CHANNEL_ID = "UCid_-IfUqAz0zER2HBNlwqQ";
 
 function guessMood(title: string, description: string): string[] {
