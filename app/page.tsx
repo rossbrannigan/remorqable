@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import MapWrapper from "./map/MapWrapper";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
 const YT_CHANNEL  = "https://www.youtube.com/@remorqable";
@@ -527,35 +528,20 @@ export default function Page() {
             </Link>
           </motion.div>
 
-          {/* Decorative map preview */}
+          {/* Live map preview */}
           <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}>
-            <Link href="/map" style={{ display: "block", textDecoration: "none", position: "relative" }}>
-              <div style={{ position: "relative", aspectRatio: "16/9", background: C.bgAlt, border: `1px solid ${C.navy}`, overflow: "hidden" }}>
-                {/* Grid lines suggesting a map */}
-                <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${C.navy}55 1px, transparent 1px), linear-gradient(90deg, ${C.navy}55 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
-                {/* Decorative "pins" */}
-                {[
-                  { top: "38%", left: "28%", label: "🇰🇭" },
-                  { top: "28%", left: "42%", label: "🇹🇭" },
-                  { top: "22%", left: "52%", label: "🇻🇳" },
-                  { top: "26%", left: "36%", label: "🇱🇦" },
-                  { top: "58%", left: "55%", label: "🇮🇩" },
-                ].map((pin, i) => (
-                  <div key={i} style={{ position: "absolute", top: pin.top, left: pin.left, transform: "translate(-50%, -50%)" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: C.bgAlt, border: `2px solid ${C.orange}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, boxShadow: `0 0 10px ${C.orange}55` }}>
-                      {pin.label}
-                    </div>
-                  </div>
-                ))}
-                {/* Overlay CTA */}
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(10,13,18,0.45)" }}>
-                  <div style={{ textAlign: "center" }}>
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", letterSpacing: "0.2em", color: C.cream, marginBottom: 8 }}>Explore the Map</div>
-                    <div style={{ fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", color: C.orange }}>Click to open →</div>
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <div style={{ position: "relative", height: 340, border: `1px solid ${C.navy}`, overflow: "hidden" }}>
+              <MapWrapper />
+              {/* Clickable overlay linking to full map page */}
+              <Link href="/map" style={{
+                position: "absolute", bottom: 12, right: 12, zIndex: 1000,
+                background: C.bg, border: `1px solid ${C.orange}`, color: C.orange,
+                padding: "7px 18px", fontSize: 10, letterSpacing: "0.3em",
+                textTransform: "uppercase", textDecoration: "none",
+              }}>
+                Full map →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
