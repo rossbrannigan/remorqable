@@ -61,6 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
+    images: [`https://img.youtube.com/vi/${id}/maxresdefault.jpg`],
   }));
 
   const seriesUrls = SERIES_SLUGS.map((slug) => ({

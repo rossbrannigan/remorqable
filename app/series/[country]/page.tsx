@@ -71,6 +71,10 @@ function YTIcon() {
   );
 }
 
+export function generateStaticParams() {
+  return Object.keys(LOCATION_MAP).map(country => ({ country }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
   const { country } = await params;
   const info = LOCATION_MAP[country];
@@ -88,15 +92,18 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
       type: 'website',
       url: `https://remorqable.com/series/${country}`,
       siteName: 'The Remorqable Channel',
+      images: [{ url: '/logo.png', width: 500, height: 500, alt: `${info.label} Travel | The Remorqable Channel` }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: ['/logo.png'],
     },
     alternates: {
       canonical: `https://remorqable.com/series/${country}`,
     },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -108,18 +115,28 @@ export default async function SeriesPage({ params }: { params: Promise<{ country
   const locationString = SLUG_TO_LOCATION[country];
   const videos = await getVideosByLocation(locationString);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": `${info.label} Travel Videos | Remorqable`,
-    "description": info.description,
-    "url": `https://remorqable.com/series/${country}`,
-    "publisher": {
-      "@type": "Organization",
-      "name": "The Remorqable Channel",
-      "url": "https://remorqable.com",
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${info.label} Travel Videos | Remorqable`,
+      "description": info.description,
+      "url": `https://remorqable.com/series/${country}`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "The Remorqable Channel",
+        "url": "https://remorqable.com",
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://remorqable.com" },
+        { "@type": "ListItem", "position": 2, "name": `${info.label} Travel Videos`, "item": `https://remorqable.com/series/${country}` },
+      ],
+    },
+  ];
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh", color: C.cream }}>
@@ -209,7 +226,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ country
                         loading="lazy"
                         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
                         className="group-hover:scale-105"
-                        onError={`this.onerror=null;this.src='https://img.youtube.com/vi/${video.id}/hqdefault.jpg'` as unknown as React.ReactEventHandler}
+                        onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }}
                       />
                       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,13,18,0.85) 0%, transparent 50%)" }} />
                       <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(10,13,18,0.72)", backdropFilter: "blur(8px)", border: `1px solid ${C.navy}`, padding: "4px 10px" }}>

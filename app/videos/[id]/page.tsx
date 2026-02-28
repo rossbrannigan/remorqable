@@ -175,6 +175,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     alternates: {
       canonical: `https://remorqable.com/videos/${id}`,
     },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 } },
     other: {
       'geo.region': location.includes('Cambodia') ? 'KH' :
                     location.includes('Thailand') ? 'TH' :
@@ -198,6 +199,16 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
   const sameLocation = others.filter(v => v.location === location);
   const different = others.filter(v => v.location !== location);
   const related = [...sameLocation, ...different].slice(0, 8);
+
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://remorqable.com" },
+      { "@type": "ListItem", "position": 2, "name": location, "item": `https://remorqable.com/series/${seriesSlug}` },
+      { "@type": "ListItem", "position": 3, "name": video.title, "item": `https://remorqable.com/videos/${id}` },
+    ],
+  };
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -238,6 +249,10 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
       {/* Sticky Nav */}

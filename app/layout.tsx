@@ -98,6 +98,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 },
               },
               sameAs: ["https://www.youtube.com/@remorqable"],
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: "https://remorqable.com/?q={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "The Remorqable Channel",
+              url: "https://remorqable.com",
+              logo: "https://remorqable.com/logo.png",
+              sameAs: ["https://www.youtube.com/@remorqable"],
+              description: "Cinematic travel storytelling across Cambodia, Thailand, Vietnam and beyond.",
             }),
           }}
         />
