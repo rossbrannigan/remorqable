@@ -221,12 +221,11 @@ export default async function SeriesPage({ params }: { params: Promise<{ country
                     <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: C.bgAlt }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                        src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
                         alt={video.title}
                         loading="lazy"
                         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
                         className="group-hover:scale-105"
-                        onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }}
                       />
                       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,13,18,0.85) 0%, transparent 50%)" }} />
                       <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(10,13,18,0.72)", backdropFilter: "blur(8px)", border: `1px solid ${C.navy}`, padding: "4px 10px" }}>
